@@ -196,7 +196,7 @@ theme = "LoveIt"
       # Gravatar Email for preferred avatar in home page
       gravatarEmail = ""
       # URL of avatar shown in home page (LINK_TO_YOUR_PHOTO_BELOW)
-      avatarURL = <img src="https://drive.google.com/uc?export=view&id=1ABk5DzINeJfQwsuXXeXuz2DJ7m0EV01z" />
+      avatarURL = avatarURL = "https://drive.google.com/uc?export=view&id=1ABk5DzINeJfQwsuXXeXuz2DJ7m0EV01z"
       #  title shown in home page (HTML format is supported)
       title = "J Brew's Blog"
       # subtitle shown in home page
