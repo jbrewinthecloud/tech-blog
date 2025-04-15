@@ -6,6 +6,10 @@ on:
       - main  # Set a branch to deploy
   pull_request:
 
+permissions:
+  id-token: write
+  contents: read  # This is needed for actions/checkout
+
 jobs:
   deploy:
     runs-on: ubuntu-22.04
@@ -32,3 +36,11 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
+          
+      - name: Configure AWS Credentials for China region audience
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          audience: sts.amazonaws.com.cn
+          aws-region: us-east-1
+          role-to-assume: arn:aws-cn:iam::851725404156:role/GitHubActions
+          
