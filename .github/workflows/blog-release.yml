@@ -48,4 +48,9 @@ jobs:
         run: |
           aws s3 sync public/ s3://my-startup-bootcamp/ --delete
 
-          
+      - name: Invalidate CloudFront Cache
+        if: github.ref == 'refs/heads/main'
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id YOUR_CLOUDFRONT_DISTRIBUTION_ID \
+            --paths "/*" 
