@@ -37,10 +37,10 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
           
-      - name: Configure AWS Credentials for China region audience
+      - name: Configure AWS Credentials for Standard region audience
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          audience: sts.amazonaws.com.cn
+          audience: sts.amazonaws.com
           aws-region: us-east-1
           role-to-assume: arn:aws-cn:iam::851725404156:role/GitHubActions
           
