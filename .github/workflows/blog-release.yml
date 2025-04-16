@@ -42,5 +42,5 @@ jobs:
         with:
           audience: sts.amazonaws.com
           aws-region: us-east-1
-          role-to-assume: arn:aws-cn:iam::851725404156:role/GitHubActions
+          role-to-assume: arn:aws:iam::851725404156:role/GitHubActions
           
