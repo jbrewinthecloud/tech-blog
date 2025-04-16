@@ -8,7 +8,7 @@ on:
 
 permissions:
   id-token: write
-  contents: read  # This is needed for actions/checkout
+  contents: write  # This is needed for actions/checkout
 
 jobs:
   deploy:
