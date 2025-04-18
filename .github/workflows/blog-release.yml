@@ -1,25 +1,55 @@
-name: GitHub Pages
+name: GitHub Pages and Infra Deployment
 
 on:
   push:
     branches:
-      - main  # Set a branch to deploy
+      - main
   pull_request:
 
 permissions:
   id-token: write
-  contents: write  # This is needed for actions/checkout
+  contents: write
 
 jobs:
-  deploy:
+  deploy-infra:
+    name: Deploy Infrastructure to AWS
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          audience: sts.amazonaws.com
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::851725404156:role/GitHubActions
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Initialize Terraform
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+
+  deploy-site:
+    name: Deploy Hugo Site
+    needs: deploy-infra
     runs-on: ubuntu-22.04
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
+
     steps:
       - uses: actions/checkout@v4
         with:
-          submodules: true  # Fetch Hugo themes (true OR recursive)
-          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+          submodules: true
+          fetch-depth: 0
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
@@ -30,14 +60,14 @@ jobs:
       - name: Build
         run: hugo --minify
 
-      - name: Deploy
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         if: github.ref == 'refs/heads/main'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
-          
-      - name: Configure AWS Credentials for Standard region audience
+
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           audience: sts.amazonaws.com
@@ -45,12 +75,10 @@ jobs:
           role-to-assume: arn:aws:iam::851725404156:role/GitHubActions
 
       - name: Sync public/ folder to S3
-        run: |
-          aws s3 sync public/ s3://my-startup-bootcamp/ --delete
+        run: aws s3 sync public/ s3://my-startup-bootcamp/ --delete
 
       - name: Invalidate CloudFront Cache
         if: github.ref == 'refs/heads/main'
-        run: |
-          aws cloudfront create-invalidation \
+        run: aws cloudfront create-invalidation \
             --distribution-id E5BTNS59XQMFC \
-            --paths "/*" 
+            --paths "/*"
