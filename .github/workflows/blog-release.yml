@@ -27,7 +27,7 @@ jobs:
         with:
           audience: sts.amazonaws.com
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::851725404156:role/GitHubActions
+          role-to-assume: arn:aws:iam::851725404156:role/Terraform
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -78,13 +78,13 @@ jobs:
         with:
           audience: sts.amazonaws.com
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::851725404156:role/GitHubActions
+          role-to-assume: arn:aws:iam::851725404156:role/Terraform
 
       - name: Sync public/ folder to S3
-        run: aws s3 sync public/ s3://my-startup-bootcamp/ --delete
+        run: aws s3 sync public/ s3://my-tech-blog-jb123/ --delete
 
       - name: Invalidate CloudFront Cache
         if: github.ref == 'refs/heads/main'
         run: aws cloudfront create-invalidation \
-            --distribution-id E5BTNS59XQMFC \
+            --distribution-id E1F0G6RQ22PJE0 \
             --paths "/*"
