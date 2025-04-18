@@ -37,11 +37,11 @@ jobs:
         working-directory: ./terraform
 
       - name: Terraform Plan
-        run: terraform plan
+        run: terraform plan -var="bucket_name=my-tech-blog-jb123"
         working-directory: ./terraform
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve -var="bucket_name=my-tech-blog-jb123"
         working-directory: ./terraform
 
   deploy-site:
