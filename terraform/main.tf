@@ -2,16 +2,27 @@ provider "aws" {
   region = var.region
 }
 
+variable "region" {
+  default = "us-east-1"
+}
+
 resource "aws_s3_bucket" "blog" {
   bucket = "my-tech-blog-jb123"
 
-  website {
-    index_document = "index.html"
-    error_document = "error.html"
-  }
-
   tags = {
     Name = "BlogBucket"
+  }
+}
+
+resource "aws_s3_bucket_website_configuration" "blog" {
+  bucket = aws_s3_bucket.blog.id
+
+  index_document {
+    suffix = "index.html"
+  }
+
+  error_document {
+    key = "error.html"
   }
 }
 
@@ -26,31 +37,33 @@ resource "aws_s3_bucket_ownership_controls" "blog" {
 resource "aws_s3_bucket_public_access_block" "blog" {
   bucket = aws_s3_bucket.blog.id
 
-  block_public_acls       = false
-  block_public_policy     = false
-  ignore_public_acls      = false
-  restrict_public_buckets = false
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
 
-resource "aws_s3_bucket_policy" "public_read" {
+resource "aws_cloudfront_origin_access_identity" "blog" {
+  comment = "CloudFront access identity for S3 bucket"
+}
+
+resource "aws_s3_bucket_policy" "oai_access" {
   bucket = aws_s3_bucket.blog.id
 
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
       {
-        Sid       = "PublicReadGetObject",
-        Effect    = "Allow",
-        Principal = "*",
-        Action    = "s3:GetObject",
-        Resource  = "${aws_s3_bucket.blog.arn}/*"
+        Sid: "AllowCloudFrontReadAccess",
+        Effect: "Allow",
+        Principal: {
+          AWS: aws_cloudfront_origin_access_identity.blog.iam_arn
+        },
+        Action: "s3:GetObject",
+        Resource: "${aws_s3_bucket.blog.arn}/*"
       }
     ]
   })
-}
-
-resource "aws_cloudfront_origin_access_identity" "blog" {
-  comment = "CloudFront access identity for S3 bucket"
 }
 
 resource "aws_cloudfront_distribution" "blog" {
@@ -97,4 +110,3 @@ resource "aws_cloudfront_distribution" "blog" {
     Name = "BlogDistribution"
   }
 }
-
