@@ -35,6 +35,13 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
+      - name: Print GitHub context
+        run: |
+          echo "GITHUB_REPOSITORY: $GITHUB_REPOSITORY"
+          echo "GITHUB_REF: $GITHUB_REF"
+          echo "ACTOR: ${{ github.actor }}"
+          echo "SUB: repo:${{ github.repository }}:ref:${{ github.ref }}"
+
       - name: Initialize Terraform
         run: terraform init
         working-directory: ./terraform
