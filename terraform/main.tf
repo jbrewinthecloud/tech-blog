@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "blog" {
-  bucket = var.bucket_name
+  bucket = var.my-tech-blog-jb123
 
   website {
     index_document = "index.html"
