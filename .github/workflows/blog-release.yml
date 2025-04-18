@@ -14,9 +14,6 @@ jobs:
   deploy-infra:
     name: Deploy Infrastructure to AWS
     runs-on: ubuntu-22.04
-    env:
-      TF_TOKEN_app_terraform_io: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
-
 
     steps:
       - name: Checkout code
