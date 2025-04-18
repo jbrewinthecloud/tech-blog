@@ -27,7 +27,7 @@ jobs:
         with:
           audience: sts.amazonaws.com
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::851725404156:role/Terraform
+          role-to-assume: arn:aws:iam::851725404156:role/GitHubActions
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -78,7 +78,7 @@ jobs:
         with:
           audience: sts.amazonaws.com
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::851725404156:role/Terraform
+          role-to-assume: arn:aws:iam::851725404156:role/GitHubActions
 
       - name: Sync public/ folder to S3
         run: aws s3 sync public/ s3://my-tech-blog-jb123/ --delete
