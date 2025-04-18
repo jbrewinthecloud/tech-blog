@@ -27,7 +27,7 @@ jobs:
         with:
           audience: sts.amazonaws.com
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::851725404156:role/Terraform
+          role-to-assume: arn:aws:iam::851725404156:role/GitHubActions 
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
