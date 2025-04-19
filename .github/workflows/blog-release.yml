@@ -88,7 +88,7 @@ jobs:
           role-to-assume: arn:aws:iam::851725404156:role/GitHubActions 
 
       - name: Sync public/ folder to S3
-        run: aws s3 sync public/ s3://my-tech-blog-jb123/ --delete
+        run: aws s3 sync public/ s3://my-tech-blog-jb123569/ --delete
 
       - name: Invalidate CloudFront Cache
         if: github.ref == 'refs/heads/main'
