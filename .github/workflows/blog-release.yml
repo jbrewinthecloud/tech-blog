@@ -92,6 +92,5 @@ jobs:
 
       - name: Invalidate CloudFront Cache
         if: github.ref == 'refs/heads/main'
-        run: aws cloudfront create-invalidation \
-            --distribution-id E276X7186YUOHI \
-            --paths "/*"
+        run: aws cloudfront create-invalidation --distribution-id E1F0G6RQ22PJE0 --paths "/*"
+
